@@ -32,65 +32,35 @@ void print_string(char *string)
 }
 void print_value(char *string, ...)
 {
-    int count = 0;
+    va_list var_arg;
+    va_start(var_arg, string);
     for (int index = 0; *(string + index) != '\0'; index++) {
         if (*(string + index) == '%') {
-            if (*(string + index + 1) == 'd' || *(string + index + 1) == 'f' || *(string + index + 1) == 's' || *(string + index + 1) == 'c') {
-                count++;
-                va_list var_arg;
-                
-                va_start(var_arg, string);
-                
-                for (int i = 0; i < count; i++) {
-                    if (i == count - 1) {
-                        if (*(string + index + 1) == 'd') {
-                            int value = va_arg(var_arg, int);
-                            print_integer(value);
-                        }
-                        else if (*(string + index + 1) == 'f')
-                        {
-                            float value = va_arg(var_arg, double);
-                            print_float(value);
-                        }
-                        else if (*(string + index + 1) == 's')
-                        {
-                            char *value = va_arg(var_arg, char *);
-                            print_string(value);
-                        }
-                        else if (*(string + index + 1) == 'c')
-                        {
-                            char value = va_arg(var_arg, int);
-                            putchar(value);
-                        }
-                    }
-                    else
-                    {
-                        if (*(string + index + 1) == 'd') {
-                            va_arg(var_arg, int);
-                        }
-                        else if (*(string + index + 1) == 'f')
-                        {
-                            va_arg(var_arg, double);
-                        }
-                        else if (*(string + index + 1) == 's')
-                        {
-                            va_arg(var_arg, char *);
-                        }
-                        else if (*(string + index + 1) == 'c')
-                        {
-                            va_arg(var_arg, int);
-                        }
-                    }
-                }
-                
-                va_end(var_arg);
-                
+            if (*(string + index + 1) == 'd') {
+                int value = va_arg(var_arg, int);
+                print_integer(value);
                 index++;
             }
-            else
+            else if (*(string + index + 1) == 'f')
             {
-                putchar(*(string + index));
+                float value = va_arg(var_arg, double);
+                print_float(value);
+                index++;
             }
+            else if (*(string + index + 1) == 's')
+            {
+                char *value = va_arg(var_arg, char *);
+                print_string(value);
+                index++;
+            }
+            else if (*(string + index + 1) == 'c')
+            {
+                char value = va_arg(var_arg, int);
+                putchar(value);
+                index++;
+            }
+            
+            va_end(var_arg);
         }
         else
         {
